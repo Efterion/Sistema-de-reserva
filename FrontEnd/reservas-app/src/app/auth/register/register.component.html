@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+</head>
+<body>
+  <div style="width: 300px; margin: 50px auto; padding: 20px; border: 1px solid #ccc; border-radius: 8px;">
+    <h2>Registro</h2>
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+      <div style="margin-bottom: 15px;">
+        <label for="username">Nombre de Usuario:</label>
+        <input id="username" type="text" formControlName="username" style="width: 100%;">
+      </div>
+
+      <div style="margin-bottom: 15px;">
+        <label for="email">Email:</label>
+        <input id="email" type="email" formControlName="email" style="width: 100%;">
+      </div>
+
+      <div style="margin-bottom: 15px;">
+        <label for="password">Contraseña:</label>
+        <input id="password" type="password" formControlName="password" style="width: 100%;">
+      </div>
+
+      <button type="submit" [disabled]="registerForm.invalid" style="width: 100%;">
+        Registrarse
+      </button>
+    </form>
+
+    <div *ngIf="successMessage" style="color: green; margin-top: 15px;">
+      {{ successMessage }}
+    </div>
+    <div *ngIf="errorMessage" style="color: red; margin-top: 15px;">
+      {{ errorMessage }}
+    </div>
+  </div>
+
+</body>
+</html>

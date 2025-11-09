@@ -1,0 +1,50 @@
+services:
+
+    db:
+        image: postgres:14-alpine
+        container_name: reservas_db
+        environment:
+            POSTGRES_USER: admin
+            POSTGRES_PASSWORD: password123
+            POSTGRES_DB: reservas_db
+        ports:
+        - "5432:5432"
+
+        volumes: 
+        - postgres_data:/var/lib/postgresql/data
+
+        healthcheck:
+            test: ["CMD-SHELL", "pg_isready -U admin -d reservas_db"]
+            interval: 5s
+            timeout: 5s
+            # start_period: 10s
+            retries: 5
+
+    
+    backend:
+        container_name: reservas_backend
+        build:
+            context: .
+            dockerfile: BackEnd/Reservas.API/Dockerfile
+        ports:
+            - "8080:8080"
+        environment:
+            ASPNETCORE_ENVIRONMENT: Development
+            ConnectionStrings__DefaultConnection: "Host=db;Database=reservas_db;Username=admin;Password=password123"
+            ASPNETCORE_URLS: http://+:8080
+        depends_on:
+            db:
+                condition: service_healthy
+    
+    frontend:
+        container_name: reservas_frontend
+        build:
+            context: ./FrontEnd/reservas-app
+            dockerfile: Dockerfile
+        ports:
+        - "4200:80"
+volumes:
+    postgres_data:
+    
+    
+    
